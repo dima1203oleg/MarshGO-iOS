@@ -5,8 +5,7 @@ ios/App/App/capacitor.config.json
 ios/App/App/config.xml
 ios/App/build/
 ios/DerivedData/
+ios/build/
 .env
 *.log
 DerivedData/
-
-ios/build/
