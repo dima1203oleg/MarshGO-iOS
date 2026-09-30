@@ -1,6 +1,8 @@
 name: iOS Simulator Build
 on:
   push:
+    branches: ['**']
+    tags: ['v*']
   pull_request:
 permissions:
   contents: read
@@ -12,7 +14,30 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: dima1203oleg/MarshGO-Site
+          # Development CI may follow main. A release tag must use the exact
+          # Site commit stored in the MARSHGO_SITE_SHA repository variable.
+          ref: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || 'main' }}
           path: web
+      - name: Require immutable Site revision for release builds
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          SITE_REF: ${{ vars.MARSHGO_SITE_SHA }}
+          SERVER_REF: ${{ vars.MARSHGO_SERVER_SHA }}
+          MIGRATION_VERSION: ${{ vars.MARSHGO_DATABASE_MIGRATION_VERSION }}
+          API_VERSION: ${{ vars.MARSHGO_API_CONTRACT_VERSION }}
+        run: |
+          if [[ ! "$SITE_REF" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "Release builds require MARSHGO_SITE_SHA to be a full 40-character commit SHA." >&2
+            exit 1
+          fi
+          if [[ ! "$SERVER_REF" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "Release builds require MARSHGO_SERVER_SHA to be a full 40-character commit SHA." >&2
+            exit 1
+          fi
+          if [[ -z "$MIGRATION_VERSION" || -z "$API_VERSION" ]]; then
+            echo "Release builds require MARSHGO_DATABASE_MIGRATION_VERSION and MARSHGO_API_CONTRACT_VERSION." >&2
+            exit 1
+          fi
       - uses: actions/setup-node@v4
         with:
           node-version: 24.21.0
@@ -23,6 +48,13 @@ jobs:
         env:
           CAPACITOR_BUILD: "true"
           VITE_API_BASE_URL: ${{ vars.MARSHGO_API_BASE_URL }}
-        run: npm run site:build && npx cap sync ios
+          MARSHGO_SERVER_SHA: ${{ vars.MARSHGO_SERVER_SHA }}
+          MARSHGO_API_CONTRACT_VERSION: ${{ vars.MARSHGO_API_CONTRACT_VERSION }}
+          MARSHGO_DATABASE_MIGRATION_VERSION: ${{ vars.MARSHGO_DATABASE_MIGRATION_VERSION }}
+          GITHUB_RUN_NUMBER: ${{ github.run_number }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+        run: |
+          npm run site:build
+          npx cap sync ios
       - name: Compile for iOS Simulator
         run: xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Debug -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build

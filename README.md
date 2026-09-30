@@ -15,7 +15,7 @@ SIMULATOR_UDID=<device-udid> VITE_API_BASE_URL=http://localhost:3002 npm run bui
 
 The included iOS GitHub Action builds the site, syncs Capacitor and compiles the iOS Simulator target. It does not sign an App Store archive or perform a public deployment.
 
-The iOS wrapper pulls the current default branch of `MarshGO-Site` during CI/local setup. A simulator build verifies compilation and first-screen rendering only; authenticated booking, GPS permission, and map-provider behavior require a configured reachable API and separate interactive/device acceptance.
+Development CI/local setup may use `MarshGO-Site/main`; local builds can pin an exact Site revision with `SITE_REF=<full-sha> npm run site:checkout`. Version-tagged iOS builds require `MARSHGO_SITE_SHA` and `MARSHGO_SERVER_SHA` full commit SHAs, plus API-contract and migration versions. The workflow embeds `release-manifest.json` containing those exact revisions. A simulator build verifies compilation only; authenticated booking, GPS permission, and map-provider behavior require a configured reachable API and separate interactive/device acceptance.
 
 ## Status and limits
 

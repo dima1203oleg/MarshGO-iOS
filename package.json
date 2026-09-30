@@ -1,14 +1,15 @@
 {
   "name": "marshgo-ios",
   "version": "1.0.0",
-  "private": false,
+  "private": true,
   "type": "module",
   "engines": {
     "node": "24.21.0"
   },
   "scripts": {
-    "site:checkout": "git clone --depth 1 https://github.com/dima1203oleg/MarshGO-Site.git web",
-    "site:build": "npm run build --prefix web",
+    "site:checkout": "node scripts/checkout-site.mjs",
+    "site:build": "npm run build --prefix web && npm run site:build-info",
+    "site:build-info": "node scripts/write-build-info.mjs",
     "sync": "npx cap sync ios",
     "build:simulator": "bash scripts/build-ios-simulator.sh"
   },
