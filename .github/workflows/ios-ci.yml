@@ -1,0 +1,28 @@
+name: iOS Simulator Build
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  simulator-build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: dima1203oleg/MarshGO-Site
+          path: web
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.21.0
+          cache: npm
+      - run: npm ci --prefix web
+      - run: npm ci
+      - name: Build bundled site and sync Capacitor
+        env:
+          CAPACITOR_BUILD: "true"
+          VITE_API_BASE_URL: ${{ vars.MARSHGO_API_BASE_URL }}
+        run: npm run site:build && npx cap sync ios
+      - name: Compile for iOS Simulator
+        run: xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Debug -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build

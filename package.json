@@ -1,0 +1,24 @@
+{
+  "name": "marshgo-ios",
+  "version": "1.0.0",
+  "private": false,
+  "type": "module",
+  "engines": {
+    "node": "24.21.0"
+  },
+  "scripts": {
+    "site:checkout": "git clone --depth 1 https://github.com/dima1203oleg/MarshGO-Site.git web",
+    "site:build": "npm run build --prefix web",
+    "sync": "npx cap sync ios",
+    "build:simulator": "bash scripts/build-ios-simulator.sh"
+  },
+  "dependencies": {
+    "@capacitor/core": "8.5.2",
+    "@capacitor/ios": "8.5.2",
+    "@capacitor/status-bar": "^8.0.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.5.2",
+    "typescript": "^6.0.0"
+  }
+}
