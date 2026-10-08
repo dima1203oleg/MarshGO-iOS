@@ -39,14 +39,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: dima1203oleg/MarshGO-Site
-          # Development CI may follow main. A release tag must use the exact
-          # Site commit stored in the MARSHGO_SITE_SHA repository variable.
-          ref: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || 'main' }}
+          # Keep the app bundle reproducible and aligned with the audited Site
+          # contract. Update this pin when a new Site commit is released.
+          ref: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || '0a37352b1a2888814f959503141126e4195d294a' }}
           path: web
       - name: Verify checked-out Site revision
-        if: startsWith(github.ref, 'refs/tags/')
         env:
-          SITE_REF: ${{ vars.MARSHGO_SITE_SHA }}
+          SITE_REF: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || '0a37352b1a2888814f959503141126e4195d294a' }}
         run: |
           ACTUAL_SITE_REF="$(git -C web rev-parse HEAD)"
           if [[ "$ACTUAL_SITE_REF" != "$SITE_REF" ]]; then
