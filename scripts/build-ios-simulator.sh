@@ -9,6 +9,17 @@ fi
 if [[ ! -d web ]]; then
   npm run site:checkout
 fi
+if [[ -n "${SITE_REF:-}" ]]; then
+  if [[ ! "$SITE_REF" =~ ^[0-9a-f]{40}$ ]]; then
+    echo "SITE_REF must be a full 40-character immutable Site commit SHA when supplied." >&2
+    exit 2
+  fi
+  ACTUAL_SITE_REF="$(git -C web rev-parse HEAD)"
+  if [[ "$ACTUAL_SITE_REF" != "$SITE_REF" ]]; then
+    echo "Checked-out Site $ACTUAL_SITE_REF does not match SITE_REF $SITE_REF." >&2
+    exit 2
+  fi
+fi
 if [[ -z "${VITE_API_BASE_URL:-}" ]]; then
   echo "Set VITE_API_BASE_URL to the HTTPS/local MARSHGO Server URL before producing a usable app bundle." >&2
   exit 2
@@ -21,7 +32,7 @@ fi
 SCREENSHOT_PATH="${SIMULATOR_SCREENSHOT_PATH:-/tmp/marshgo-ios-simulator.png}"
 npm ci --prefix web
 CAPACITOR_BUILD=true VITE_API_BASE_URL="$VITE_API_BASE_URL" npm run site:build
-npx cap sync ios
+./node_modules/.bin/cap sync ios
 xcrun simctl boot "$SIMULATOR_UDID" 2>/dev/null || true
 xcrun simctl bootstatus "$SIMULATOR_UDID" -b
 xcodebuild -quiet -project ios/App/App.xcodeproj -scheme App -configuration Debug -sdk iphonesimulator \
