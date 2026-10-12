@@ -41,11 +41,11 @@ jobs:
           repository: dima1203oleg/MarshGO-Site
           # Keep the app bundle reproducible and aligned with the synced Site
           # revision. Update this pin when the shared web client is released.
-          ref: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || '0e10073336722e7b39a8ee679b58ea81b342e4ac' }}
+          ref: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || '09a9bdd23f57ff5e83b547771ec5e254c1178f28' }}
           path: web
       - name: Verify checked-out Site revision
         env:
-          SITE_REF: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || '0e10073336722e7b39a8ee679b58ea81b342e4ac' }}
+          SITE_REF: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || '09a9bdd23f57ff5e83b547771ec5e254c1178f28' }}
         run: |
           ACTUAL_SITE_REF="$(git -C web rev-parse HEAD)"
           if [[ "$ACTUAL_SITE_REF" != "$SITE_REF" ]]; then
