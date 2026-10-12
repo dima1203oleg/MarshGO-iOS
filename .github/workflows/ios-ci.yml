@@ -39,13 +39,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: dima1203oleg/MarshGO-Site
-          # Keep the app bundle reproducible and aligned with the synced Site
-          # revision. Update this pin when the shared web client is released.
-          ref: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || '1745822ce1162dcaee2728fd87f2593844960268' }}
+          # Keep the app bundle reproducible and aligned with the audited Site
+          # branch. Release tags still require the exact owner-configured SHA.
+          ref: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || '570ea7b9faa3d55a7e24599657c86fb2903d4cce' }}
           path: web
       - name: Verify checked-out Site revision
         env:
-          SITE_REF: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || '1745822ce1162dcaee2728fd87f2593844960268' }}
+          SITE_REF: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || '570ea7b9faa3d55a7e24599657c86fb2903d4cce' }}
         run: |
           ACTUAL_SITE_REF="$(git -C web rev-parse HEAD)"
           if [[ "$ACTUAL_SITE_REF" != "$SITE_REF" ]]; then
