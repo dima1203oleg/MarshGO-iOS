@@ -39,13 +39,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: dima1203oleg/MarshGO-Site
-          # Keep the app bundle reproducible and aligned with the audited Site
-          # branch. Release tags still require the exact owner-configured SHA.
-          ref: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || 'dc937069e16ebb5bec5b66c674f664497c079207' }}
+          # Keep the app bundle reproducible and aligned with the reviewed Site
+          # commit. Release tags still require the exact owner-configured SHA.
+          ref: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || '5b9abffda9252b0cd0ff90ed1e425acb3ba18c51' }}
           path: web
       - name: Verify checked-out Site revision
         env:
-          SITE_REF: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || 'dc937069e16ebb5bec5b66c674f664497c079207' }}
+          SITE_REF: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || '5b9abffda9252b0cd0ff90ed1e425acb3ba18c51' }}
         run: |
           ACTUAL_SITE_REF="$(git -C web rev-parse HEAD)"
           if [[ "$ACTUAL_SITE_REF" != "$SITE_REF" ]]; then
