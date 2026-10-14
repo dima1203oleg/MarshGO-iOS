@@ -45,3 +45,7 @@ Pulled Site `50816d7`, rebuilt the web bundle, ran Capacitor sync, and built/ins
 ## Navigation Experience 6 review candidate (2026-10-14)
 
 The `codex/navigation-experience-6` branch pins MarshGO-Site commit `52ec4f7c888d9ca9a671b0e858a9f018406034b1` in `.github/workflows/ios-ci.yml`. The Site candidate adds the shared Journey route summary/segment strip and fresh authorized transit-position batching. The simulator workflow verifies the exact Site SHA and compiles the Capacitor bundle. This does not verify physical GPS, background execution, APNs, authenticated Journey interactions, or provider-backed bus-stop arrival and rideshare Journey tracking.
+
+## Confirmed rideshare approach route pin (2026-10-14)
+
+The `codex/pin-rendezvous-site` candidate pins Site `22fe4f1089f3acfb342e8a8399ca8e9fe4cd1730`. Its shared Journey screen displays an OSRM baseline approach only for a participant-authorized confirmed booking with a fresh, accurate driver GPS fix; it labels the estimate as not traffic-aware and hides it when the source fix or route is stale. iOS simulator CI validates the exact Site pin and app compilation. It does not validate physical-device GPS/background behavior, provider availability, or a production endpoint.
