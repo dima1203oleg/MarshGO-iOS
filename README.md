@@ -21,7 +21,7 @@ Development CI/local setup may use `MarshGO-Site/main`; local builds can pin an 
 
 The current client is a WKWebView wrapper around the PWA. Foreground GPS is supported by the web experience; guaranteed background GPS, physical-device permission verification, camera/QR scanner, push notifications, App Store signing, and release metadata are not complete. Map display and navigation need configured production routing and contracted/self-hosted map tiles. Do not ship with a blank or local-only `VITE_API_BASE_URL`.
 
-Earlier simulator visual checks covered the welcome screen and safe-area layout on iPhone 15 Pro Max and iPhone 16 Pro Max; they did not exercise production sign-in or booking. CI now pins the current shared review candidate Site SHA `dc937069e16ebb5bec5b66c674f664497c079207`; simulator CI for this pin is pending, and physical-device acceptance is still open.
+Earlier simulator visual checks covered the welcome screen and safe-area layout on iPhone 15 Pro Max and iPhone 16 Pro Max; they did not exercise production sign-in or booking. The `codex/navigation-experience-6` review branch pins shared Site SHA `52ec4f7c888d9ca9a671b0e858a9f018406034b1` in its simulator workflow. That build verifies packaging and compilation; physical-device GPS, background behavior and authenticated Journey acceptance remain open.
 
 ## Cross-repository audit
 

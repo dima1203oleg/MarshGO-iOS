@@ -41,3 +41,11 @@ Pulled `MarshGO-Site` revision `2cdc4a2`, rebuilt the Capacitor bundle, and buil
 ## Passenger-confirmed navigation route update verification (2026-09-30)
 
 Pulled Site `50816d7`, rebuilt the web bundle, ran Capacitor sync, and built/installed/launched `ua.marshgo.app` on iPhone 15 Pro Max (`95861893-8B55-4A9C-B30D-C9BD1FCC4132`) and iPhone 16 Pro Max (`316E0648-A5CF-4D53-8601-A87A9B5EB862`). Final screenshots `/tmp/marshgo-navroute-iphone15.png` and `/tmp/marshgo-navroute-iphone16-final.png` show the welcome screen at both simulator resolutions. iPhone 16's first capture was blank while WKWebView completed its initial load; after relaunch and waiting for first paint it rendered normally. The bundle targets `http://localhost:3306`, with no API server active, so authenticated flows, real map tiles, route update handling and GPS were not exercised on-device. Both `xcodebuild` simulator builds succeeded; Node 25.4.0 emitted the configured Node 24.21.0 engine warning.
+
+## Navigation Experience 6 review candidate (2026-10-14)
+
+The `codex/navigation-experience-6` branch pins MarshGO-Site commit `52ec4f7c888d9ca9a671b0e858a9f018406034b1` in `.github/workflows/ios-ci.yml`. The Site candidate adds the shared Journey route summary/segment strip and fresh authorized transit-position batching. The simulator workflow verifies the exact Site SHA and compiles the Capacitor bundle. This does not verify physical GPS, background execution, APNs, authenticated Journey interactions, or provider-backed bus-stop arrival and rideshare Journey tracking.
+
+## Confirmed rideshare approach route pin (2026-10-14)
+
+The `codex/pin-rendezvous-site` candidate pins Site `aff0ead39db51abfd939820530b3a874db26cfaf`. Its shared Journey screen displays an OSRM baseline approach only for a participant-authorized confirmed booking with a fresh, accurate driver GPS fix; it labels the estimate as not traffic-aware and hides it when the source fix or route is stale. The current Site commit also keeps all four route segments visible on mobile cards and keeps navigation stop controls available in compact and partial sheets. iOS simulator CI validates the exact Site pin and app compilation. It does not validate physical-device GPS/background behavior, provider availability, or a production endpoint.
