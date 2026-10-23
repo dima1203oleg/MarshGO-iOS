@@ -41,11 +41,11 @@ jobs:
           repository: dima1203oleg/MarshGO-Site
           # Keep the app bundle reproducible and aligned with the reviewed Site
           # commit. Release tags still require the exact owner-configured SHA.
-          ref: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || '1d2aaa012b88519273eae7a2b8d703ec32c212f6' }}
+          ref: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || '1d0f1febfd757dfcbaa3d9fbb06fef756d0c9fae' }}
           path: web
       - name: Verify checked-out Site revision
         env:
-          SITE_REF: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || '1d2aaa012b88519273eae7a2b8d703ec32c212f6' }}
+          SITE_REF: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || '1d0f1febfd757dfcbaa3d9fbb06fef756d0c9fae' }}
         run: |
           ACTUAL_SITE_REF="$(git -C web rev-parse HEAD)"
           if [[ "$ACTUAL_SITE_REF" != "$SITE_REF" ]]; then
@@ -73,7 +73,7 @@ jobs:
       - name: Verify embedded release manifest
         env:
           SERVER_REF: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SERVER_SHA || 'b65882584a3ad1e8dd7512d13176f52299cded51' }}
-          SITE_REF: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || '1d2aaa012b88519273eae7a2b8d703ec32c212f6' }}
+          SITE_REF: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || '1d0f1febfd757dfcbaa3d9fbb06fef756d0c9fae' }}
           IOS_REF: ${{ github.sha }}
         run: |
           node --input-type=module <<'NODE'
