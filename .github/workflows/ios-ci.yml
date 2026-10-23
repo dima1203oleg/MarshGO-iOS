@@ -73,7 +73,7 @@ jobs:
       - name: Verify embedded release manifest
         env:
           SERVER_REF: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SERVER_SHA || 'b65882584a3ad1e8dd7512d13176f52299cded51' }}
-          SITE_REF: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || '1e8ce1d42872f9234bf2968f924b7b4a27c10723' }}
+          SITE_REF: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || 'a000b3cc07a956ae7ded4563ab5e97b11fe3db71' }}
           IOS_REF: ${{ github.sha }}
         run: |
           node --input-type=module <<'NODE'
