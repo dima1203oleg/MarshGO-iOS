@@ -41,12 +41,11 @@ jobs:
           repository: dima1203oleg/MarshGO-Site
           # Development CI may follow main. A release tag must use the exact
           # Site commit stored in the MARSHGO_SITE_SHA repository variable.
-          ref: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || 'main' }}
+          ref: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || '2af5219538aa005d285f9236ca0b0dafaca0274a' }}
           path: web
       - name: Verify checked-out Site revision
-        if: startsWith(github.ref, 'refs/tags/')
         env:
-          SITE_REF: ${{ vars.MARSHGO_SITE_SHA }}
+          SITE_REF: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || '2af5219538aa005d285f9236ca0b0dafaca0274a' }}
         run: |
           ACTUAL_SITE_REF="$(git -C web rev-parse HEAD)"
           if [[ "$ACTUAL_SITE_REF" != "$SITE_REF" ]]; then
@@ -63,7 +62,7 @@ jobs:
         env:
           CAPACITOR_BUILD: "true"
           VITE_API_BASE_URL: ${{ vars.MARSHGO_API_BASE_URL }}
-          MARSHGO_SERVER_SHA: ${{ vars.MARSHGO_SERVER_SHA }}
+          MARSHGO_SERVER_SHA: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SERVER_SHA || 'c7252783f3c8b3b1140d621bcbdae175248008be' }}
           MARSHGO_API_CONTRACT_VERSION: ${{ vars.MARSHGO_API_CONTRACT_VERSION }}
           MARSHGO_DATABASE_MIGRATION_VERSION: ${{ vars.MARSHGO_DATABASE_MIGRATION_VERSION }}
           GITHUB_RUN_NUMBER: ${{ github.run_number }}
@@ -71,6 +70,21 @@ jobs:
         run: |
           npm run site:build
           npx cap sync ios
+      - name: Verify embedded release manifest
+        env:
+          SERVER_REF: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SERVER_SHA || 'c7252783f3c8b3b1140d621bcbdae175248008be' }}
+          SITE_REF: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || '2af5219538aa005d285f9236ca0b0dafaca0274a' }}
+          IOS_REF: ${{ github.sha }}
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFile } from 'node:fs/promises';
+          const manifest = JSON.parse(await readFile('web/dist/release-manifest.json', 'utf8'));
+          const expected = { serverCommit: process.env.SERVER_REF, siteCommit: process.env.SITE_REF, iosCommit: process.env.IOS_REF };
+          for (const [key, value] of Object.entries(expected)) {
+            if (manifest[key] !== value) throw new Error(`${key} mismatch: expected ${value}, received ${manifest[key]}`);
+          }
+          console.log(`Verified exact release inputs: Server ${expected.serverCommit}, Site ${expected.siteCommit}, iOS ${expected.iosCommit}`);
+          NODE
       - name: Compile for iOS Simulator
         run: xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Debug -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build
       - name: Compile unsigned Release archive
