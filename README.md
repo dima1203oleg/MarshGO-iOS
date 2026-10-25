@@ -19,7 +19,7 @@ Development CI/local setup may use `MarshGO-Site/main`; local builds can pin an 
 
 ## Current review candidate
 
-The current iOS candidate pins Site `9569bb4f174a4bdf912a6f490e69a359148db342` and Server `134ed017828a020e1d5f696b3cb9ea95527bb093` for non-tag CI. The workflow checks the embedded build manifest against both source SHAs and the iOS commit. Release tags continue to require owner-configured exact SHAs, API/migration versions, and public HTTPS API origin. Simulator CI confirms compilation and input pins only; it does not validate production sign-in, live GPS, physical-device permissions, background behavior, or App Store signing.
+The current iOS candidate pins Site `cc1499573732a41e8ff31d7ab634d15421d45df1` and Server `a403a51a203d9d89685c10c69658c8fd95b70e9b` for non-tag CI. The workflow checks the embedded build manifest against both source SHAs and the iOS commit. Release tags continue to require owner-configured exact SHAs, API/migration versions, and public HTTPS API origin. Simulator CI confirms compilation and input pins only; it does not validate production sign-in, live GPS, physical-device permissions, background behavior, or App Store signing.
 
 ## Status and limits
 
