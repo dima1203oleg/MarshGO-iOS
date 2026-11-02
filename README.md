@@ -21,7 +21,7 @@ Development CI/local setup may use `MarshGO-Site/main`; local builds can pin an 
 
 The current client is a WKWebView wrapper around the PWA. Foreground GPS is supported by the web experience; guaranteed background GPS, physical-device permission verification, camera/QR scanner, push notifications, App Store signing, and release metadata are not complete. Map display and navigation need configured production routing and contracted/self-hosted map tiles. Do not ship with a blank or local-only `VITE_API_BASE_URL`.
 
-Earlier simulator visual checks covered the welcome screen and safe-area layout on iPhone 15 Pro Max and iPhone 16 Pro Max; they did not exercise production sign-in or booking. Branch CI builds the shared Web release pin `3f2c9be87b3f92f695ba1d7abc4128ab2a1d74d9` (the Site revision behind the running `marshgo/web:RC-2026-11-02-popupdate.2` image); release tags ignore that fallback and require the `MARSHGO_SITE_SHA` / `MARSHGO_SERVER_SHA` / `MARSHGO_API_BASE_URL` repository variables. Simulator CI for this pin is pending, and physical-device acceptance is still open.
+Earlier simulator visual checks covered the welcome screen and safe-area layout on iPhone 15 Pro Max and iPhone 16 Pro Max; they did not exercise production sign-in or booking. Branch CI builds the Site commit now on `MarshGO-Site/main`, `8d927e8098a36f94f2ac519e52f7c720f1e0d239`, and records `MarshGO-Server/main` `a632d873252c6d51687918f831e39bdb77240cb9` as the Server revision in `release-manifest.json`; release tags ignore those fallbacks and require the `MARSHGO_SITE_SHA` / `MARSHGO_SERVER_SHA` / `MARSHGO_API_BASE_URL` repository variables. Physical-device acceptance is still open.
 
 ## Cross-repository audit
 

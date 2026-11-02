@@ -41,11 +41,11 @@ jobs:
           repository: dima1203oleg/MarshGO-Site
           # Keep the app bundle reproducible and aligned with the reviewed Site
           # commit. Release tags still require the exact owner-configured SHA.
-          ref: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || '3f2c9be87b3f92f695ba1d7abc4128ab2a1d74d9' }}
+          ref: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || '8d927e8098a36f94f2ac519e52f7c720f1e0d239' }}
           path: web
       - name: Verify checked-out Site revision
         env:
-          SITE_REF: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || '3f2c9be87b3f92f695ba1d7abc4128ab2a1d74d9' }}
+          SITE_REF: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || '8d927e8098a36f94f2ac519e52f7c720f1e0d239' }}
         run: |
           ACTUAL_SITE_REF="$(git -C web rev-parse HEAD)"
           if [[ "$ACTUAL_SITE_REF" != "$SITE_REF" ]]; then
@@ -62,7 +62,7 @@ jobs:
         env:
           CAPACITOR_BUILD: "true"
           VITE_API_BASE_URL: ${{ vars.MARSHGO_API_BASE_URL }}
-          MARSHGO_SERVER_SHA: ${{ vars.MARSHGO_SERVER_SHA }}
+          MARSHGO_SERVER_SHA: ${{ vars.MARSHGO_SERVER_SHA || 'a632d873252c6d51687918f831e39bdb77240cb9' }}
           MARSHGO_API_CONTRACT_VERSION: ${{ vars.MARSHGO_API_CONTRACT_VERSION }}
           MARSHGO_DATABASE_MIGRATION_VERSION: ${{ vars.MARSHGO_DATABASE_MIGRATION_VERSION }}
           GITHUB_RUN_NUMBER: ${{ github.run_number }}
