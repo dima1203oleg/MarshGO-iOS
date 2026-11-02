@@ -39,14 +39,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: dima1203oleg/MarshGO-Site
-          # Development CI may follow main. A release tag must use the exact
-          # Site commit stored in the MARSHGO_SITE_SHA repository variable.
-          ref: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || 'main' }}
+          # Keep the app bundle reproducible and aligned with the reviewed Site
+          # commit. Release tags still require the exact owner-configured SHA.
+          ref: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || '8d927e8098a36f94f2ac519e52f7c720f1e0d239' }}
           path: web
       - name: Verify checked-out Site revision
-        if: startsWith(github.ref, 'refs/tags/')
         env:
-          SITE_REF: ${{ vars.MARSHGO_SITE_SHA }}
+          SITE_REF: ${{ startsWith(github.ref, 'refs/tags/') && vars.MARSHGO_SITE_SHA || '8d927e8098a36f94f2ac519e52f7c720f1e0d239' }}
         run: |
           ACTUAL_SITE_REF="$(git -C web rev-parse HEAD)"
           if [[ "$ACTUAL_SITE_REF" != "$SITE_REF" ]]; then
@@ -63,14 +62,14 @@ jobs:
         env:
           CAPACITOR_BUILD: "true"
           VITE_API_BASE_URL: ${{ vars.MARSHGO_API_BASE_URL }}
-          MARSHGO_SERVER_SHA: ${{ vars.MARSHGO_SERVER_SHA }}
+          MARSHGO_SERVER_SHA: ${{ vars.MARSHGO_SERVER_SHA || 'a632d873252c6d51687918f831e39bdb77240cb9' }}
           MARSHGO_API_CONTRACT_VERSION: ${{ vars.MARSHGO_API_CONTRACT_VERSION }}
           MARSHGO_DATABASE_MIGRATION_VERSION: ${{ vars.MARSHGO_DATABASE_MIGRATION_VERSION }}
           GITHUB_RUN_NUMBER: ${{ github.run_number }}
           GITHUB_REF_NAME: ${{ github.ref_name }}
         run: |
           npm run site:build
-          npx cap sync ios
+          ./node_modules/.bin/cap sync ios
       - name: Compile for iOS Simulator
         run: xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Debug -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build
       - name: Compile unsigned Release archive
