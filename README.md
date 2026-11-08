@@ -21,7 +21,7 @@ Development CI/local setup may use `MarshGO-Site/main`; local builds can pin an 
 
 The current client is a WKWebView wrapper around the PWA. Foreground GPS is supported by the web experience; guaranteed background GPS, physical-device permission verification, camera/QR scanner, push notifications, App Store signing, and release metadata are not complete. Map display and navigation need configured production routing and contracted/self-hosted map tiles. Do not ship with a blank or local-only `VITE_API_BASE_URL`.
 
-Earlier simulator visual checks covered the welcome screen and safe-area layout on iPhone 15 Pro Max and iPhone 16 Pro Max; they did not exercise production sign-in or booking. Branch CI now pins Site main `868a7d16d44369d8d73767e28359f4ea8d87195f` and records Server main `408d54b5531191885069e057b405cc50444eb268` in `release-manifest.json`; release tags still require the owner-configured `MARSHGO_SITE_SHA` / `MARSHGO_SERVER_SHA` / `MARSHGO_API_BASE_URL` repository variables. Physical-device acceptance is still open.
+Earlier simulator visual checks covered the welcome screen and safe-area layout on iPhone 15 Pro Max and iPhone 16 Pro Max; they did not exercise production sign-in or booking. Branch CI now builds the Site web bundle from exact main SHA `484980e1b50e0029973f8180a3bac377e7268f34` and identifies Server main SHA `408d54b5531191885069e057b405cc50444eb268` in the build metadata; release tags still require the owner-configured `MARSHGO_SITE_SHA` / `MARSHGO_SERVER_SHA` / `MARSHGO_API_BASE_URL` repository variables. Physical-device acceptance is still open.
 
 ## Cross-repository audit
 
